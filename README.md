@@ -75,7 +75,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
   - JDK7u21：[HashSet + HashMap + AnnotationInvocationHandler + TemplatesImpl](./B%20-%20反序列化/JDK7u21/main.md)
   - Groovy：[AnnotationInvocationHandler + ConvertedClosure + MethodClosure](./B%20-%20反序列化/Groovy1/main.md)
   - FileUpload：[DiskFileItem + DeferredFileOutputStream](./B%20-%20反序列化/FileUpload/main.md)
-
+  - Wicket：[FileUpload Gadget chain](./B%20-%20反序列化/Wicket1/main.md)
 ## 内存马
 
 内存马是一种无文件Webshell，简单来说就是服务器上不会存在需要链接的webshell脚本文件。 传统webshell会在目标服务器中留存具体的payload文件，但现在安全软件对于静态webshell的查杀能力已经非常的强，可能payload文件在写入的一瞬间就会被查杀，而内存马的原理就是在web组件或者应用程序中，注册一层访问路由，访问者通过这层路由，来执行我们控制器中的代码，一句话就能概括，那就是对访问路径映射及相关处理代码的动态注册。
