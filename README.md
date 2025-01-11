@@ -11,10 +11,7 @@ Java安全学习笔记，记录一下自己从0开始学习Java安全的过程�
 
 ## 环境准备
 
-在调试代码的过程中，因为漏洞触发的版本可能均不相同，所以可能会用到不同版本的JDK，我记录一下我调试过程中所有的JDK，同时这里记录一下不同版本JDK的下载地址
-
-- JDK7u80
-- JDK8u66、8u71、8u73、8u121、8u231、8u431
+记录一下JDK等环境的下载地址，下次就不用Google搜索了，嘿嘿嘿！
 
 - [Oracle官方JDK8下载](https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html)
 - [华为JDK镜像站](https://repo.huaweicloud.com/java/jdk/)
@@ -41,9 +38,10 @@ Java 的 ASM、Javassist 和反射是安全研究的重要方向之一，主要�
 
 JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial中的代码来记录的。嗯~网上有很多魔改代码，但是如果想要标准系统化的学习的话还是要基于ysoserial这个反序列化漏洞的起源项目来学习。
 
-- Java类转字节码工具: [Java类转Base64编码字符串 + Base64编码字符串转.class文件](./B%20-%20反序列化/Java类转字节码工具/main.md)
+- Java类转字节码工具：[Java类转Base64编码字符串 + Base64编码字符串转.class文件](./B%20-%20反序列化/Java类转字节码工具/main.md)
 - 基础知识：[反序列化漏洞的起源 + JAVA反序列化 + URLDNS](./B%20-%20反序列化/JAVA反序列化学习-前置知识（基于ysoserial）/反序列化与反射介绍.md)
-- 详解TemplatesImpl反序列化: [XSLT + Templates + TransletClassLoader](./B%20-%20反序列化/详解TemplatesImpl/main.md)
+- 详解TemplatesImpl反序列化：[XSLT + Templates + TransletClassLoader](./B%20-%20反序列化/详解TemplatesImpl/main.md)
+- AmazingCode (1)绕过构造方法的限制：[Object默认构造 + 创建目标无参构造实例](./B%20-%20反序列化/BeautifulCode1/main.md)
 
 ### CC链
 
@@ -56,7 +54,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
   - CC5攻击链：[BadAttributeValueExpException + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections5（基于ysoserial）/main.md)
   - CC6攻击链：[HashSet + HashMap + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections6（基于ysoserial）/main.md)
   - CC7攻击链：[HashTable + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections7（基于ysoserial）/main.md)
-  - CC2+CC5变种攻击链: [BadAttributeValueExpException + TiedMapEntry + LazyMap + ChainedTransformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CC2+CC5变种笔记/CC2+CC5变种笔记.md)
+  - CC2+CC5变种攻击链：[BadAttributeValueExpException + TiedMapEntry + LazyMap + ChainedTransformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CC2+CC5变种笔记/CC2+CC5变种笔记.md)
 
 
   ### CB链
