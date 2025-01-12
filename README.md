@@ -89,6 +89,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
 ## JNDI注入
 
 - JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
+- JdbcRowSetImpl分析：[connect + getDatabaseMetaData + setAutoCommit + prepare + execute](./D%20-%20JNDI注入/JdbcRowSetImpl/main.md)
 - log4j2 注入/远程代码执行 漏洞 CVE-2021-44228：[log4j2漏洞点分析 + 漏洞代码分析](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-1(CVE-2021-44228)/main.md)
 - log4j2 注入/远程代码执行-2 漏洞：[WAF绕过 + 协议总结 + 信息泄露用法](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-2/main.md)
 
