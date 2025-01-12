@@ -86,17 +86,13 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
 - Listener内存马: [Listener示例 + ApplicationListener Debug + Listener内存马代码](./C%20-%20内存马/D%20-%20Listener内存马/main.md)
 - Filter内存马: [Filter代码Debug + Filter内存马代码 + 运行](./C%20-%20内存马/E%20-%20Filter内存马/main.md)
 
-## 漏洞复现篇
+## JNDI注入
 
-准备把自己分析漏洞的过程都记录下来，然后分类(就按攻击手法来分类了，不按组件来分类了，感觉按照攻击手法来分类更容易学习)，到时候回来想看的话也非常好找
+- JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
+- log4j2 注入/远程代码执行 漏洞 CVE-2021-44228：[log4j2漏洞点分析 + 漏洞代码分析](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-1(CVE-2021-44228)/main.md)
+- log4j2 注入/远程代码执行-2 漏洞：[WAF绕过 + 协议总结 + 信息泄露用法](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-2/main.md)
 
-JNDI注入
-
-- log4j2 注入/远程代码执行 漏洞 CVE-2021-44228: [log4j2漏洞点分析 + 代码分析 + JNDIExploit攻击工具分析](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-1(CVE-2021-44228)/main.md)
-- log4j2 注入/远程代码执行-2 漏洞 [WAF绕过 + 协议总结 + 信息泄露用法](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-2/main.md)
-
-
-CVE复现
+## CVE复现
 
  - TOCTOU竞争导致的Tomcat任意代码执行[CVE-2024-50379](./F%20-%20漏洞复现/CVE-2024-50379%20条件竞争%20&%20任意代码执行/main.md)
 
