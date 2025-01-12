@@ -1,14 +1,10 @@
 这是对网上一些文章和视频的再总结，可以参考以下资料，师傅们分析的都挺详细了，我这就是记录一下师傅们写的博客。
 
-[廖雪峰 - 给了简单的小例子，了解即可](https://liaoxuefeng.com/books/java/network/rmi/)
-
-[B站视频(白师傅)](https://www.bilibili.com/video/BV1L3411a7ax)
-
-[先知社区(小阳师傅) - 讲的比较详细，偏理论，可以结合白师傅的视频学习理论](https://xz.aliyun.com/t/9261)
-
-[g师傅 - 攻击手法讲的特别详细，学完理论后看这篇可以学攻击手法](https://xz.aliyun.com/t/9053)
-
-[T师傅，也是分析攻击案例分析的比较多，强烈推荐](https://xz.aliyun.com/t/8706)
+- [廖雪峰 - 给了简单的小例子，了解即可](https://liaoxuefeng.com/books/java/network/rmi/)
+- [B站视频(白师傅)](https://www.bilibili.com/video/BV1L3411a7ax)
+- [先知社区(小阳师傅) - 讲的比较详细，偏理论，可以结合白师傅的视频学习理论](https://xz.aliyun.com/t/9261)
+- [g师傅 - 攻击手法讲的特别详细，学完理论后看这篇可以学攻击手法](https://xz.aliyun.com/t/9053)
+- [T师傅，也是分析攻击案例分析的比较多，强烈推荐](https://xz.aliyun.com/t/8706)
 
 ## RMI概述
 
@@ -275,7 +271,7 @@ public class Client {
 
 当调用bind或rebind时，会用readObject读出参数名和远程对象，所以都可以利用
 
-如果服务端存在cc1相关组件漏洞，那么就可以使用反序列化攻击，CC1攻击链可以参考(https://www.cnblogs.com/erosion2020/p/18553568)
+如果服务端存在cc1相关组件漏洞，那么就可以使用反序列化攻击，CC1攻击链可以参考我的[CC1攻击链](../../B%20-%20反序列化/CommonsCollections1（基于ysoserial）/main.md)
 
 **注意下边给的两个poc只能在 jdk7u71以下的版本才能执行，7u71这个版本也不行，我用的是7u66这个版本的JDK，因为在7u71及以上的版本中AnnotationInvocationHandler的readObject方法中，LazyMap被替换成了LinkedHashMap因此无法触发LazyMap构造的POC，虽然有绕过方法，但是这里只是为了说明RMI的漏洞，所以降低JDK版本即可**
 

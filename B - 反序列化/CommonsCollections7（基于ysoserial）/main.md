@@ -212,7 +212,7 @@ public class CommonsCollections7 {
 
 弹个cmd窗口
 
-![image-20241119220600408](./main.assets/image-20241119220600408.png)
+![image-20241119220600408](./main.assets/cc7-1.png)
 
 ## 调用链总结(简化版 - cc7bySimplify)
 

@@ -212,7 +212,7 @@ public class CommonsBeanUtils1 {
 
 尝试运行代码，来弹个cmd
 
-![image-20241120142836006](./main.assets/image-20241120142836006.png)
+![image-20241120142836006](./main.assets/cb1.png)
 
 ## 调用链
 

@@ -1257,7 +1257,7 @@ Thread.currentThread().setContextClassLoader(diskLoader);
 
 ## 下一步
 
-1. 你可以研究ClassLoader在Web[容器](https://cloud.tencent.com/product/tke?from_column=20065&from=20065)内的应用了，如Tomcat。  
+1. 你可以研究[ClassLoader在Web容器内的应用](https://cloud.tencent.com/product/tke?from_column=20065&from=20065)了，如Tomcat。  
 2. 可以尝试以这个为基础，继续学习Android中的ClassLoader机制。
 
 ## 原博客参考引用文献

@@ -1,6 +1,6 @@
 ## 概述
 
-本篇文章是https://juejin.cn/post/7055306172265414663，这篇文章的再总结，剔除了与Java安全研究没太大关系的内容，对JAVAWEB中的Servlet、Filter、Listener以及Connector、Container则加重了篇幅。
+本篇文章是对[深入理解Tomcat的架构](https://juejin.cn/post/7055306172265414663)，这篇文章的再总结，剔除了与Java安全研究没太大关系的内容，对JAVAWEB中的Servlet、Filter、Listener以及Connector、Container则加重了篇幅。
 
 ## Servlet
 

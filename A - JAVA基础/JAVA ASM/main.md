@@ -865,7 +865,7 @@ public class Main {
 
 本文为后续研究Java自动化漏洞挖掘IAST与RASP打基础
 
-## 原作者博客内容参考
+## 参考链接
 
-[ASM 4.0 A Java bytecode engineering library (ow2.io)](https://asm.ow2.io/asm4-guide.pdf)
-[org.objectweb.asm (ASM 9.6) (ow2.io)](https://asm.ow2.io/javadoc/org/objectweb/asm/package-summary.html)
+- [ASM 4.0 A Java bytecode engineering library (ow2.io)](https://asm.ow2.io/asm4-guide.pdf)
+- [org.objectweb.asm (ASM 9.6) (ow2.io)](https://asm.ow2.io/javadoc/org/objectweb/asm/package-summary.html)

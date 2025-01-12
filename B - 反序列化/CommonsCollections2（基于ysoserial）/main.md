@@ -683,7 +683,7 @@ public class CommonsCollections2 {
 
 执行结果如下，计算器被弹出
 
-![image-20241118221954685](./main.assets/image-20241118221954685.png)
+![image-20241118221954685](./main.assets/cc2-1.png)
 
 ## 调用链总结
 

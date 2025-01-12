@@ -135,7 +135,7 @@ public class CommonsCollections4 {
 
 来弹个窗口吧
 
-![image-20241119142652458](./main.assets/image-20241119142652458.png)
+![image-20241119142652458](./main.assets/cc4-1.png)
 
 ## 调用链分析
 

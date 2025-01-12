@@ -4,7 +4,7 @@
 
 当然那篇写的更全一些，更适合什么都不懂的小白，这篇针对于网络安全学习的，只关注JAVA WEB应用创建和Tomcat配置的部分，最后会使用IDEA配置一下可以调试tomcat中的catalina代码的debug环境。
 
-从0配置JAVA WEB环境：https://www.cnblogs.com/erosion2020/p/14019395.html，这里边使用的是Tomcat10.x版本，Tomcat10.x默认不支持JDK8，所以如果你想使用JDK8，最好还是使用Tomcat9.x版本(推荐)，或者Tomcat8.x版本(不推荐)。
+[从0配置JAVA WEB环境](https://www.cnblogs.com/erosion2020/p/14019395.html)，这里边使用的是Tomcat10.x版本，Tomcat10.x默认不支持JDK8，所以如果你想使用JDK8，最好还是使用Tomcat9.x版本(推荐)，或者Tomcat8.x版本(不推荐)。
 
 官方文档(which version)：https://tomcat.apache.org/whichversion.html
 
@@ -14,7 +14,7 @@ JDK8u421、Tomcat9.0.97、IDEA 2023.3.8
 
 ## 安装Tomcat
 
-下载地址：https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.exe
+下载地址：[Tomcat 9.0.97-windows-x64](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.97/bin/apache-tomcat-9.0.97.exe)
 
 或使用新版9.x Tomcat：https://tomcat.apache.org/download-90.cgi
 

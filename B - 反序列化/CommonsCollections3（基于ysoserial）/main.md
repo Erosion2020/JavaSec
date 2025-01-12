@@ -187,7 +187,7 @@ public class CommonsCollections3 {
 
 运行效果如下
 
-![image-20241119105439855](./main.assets/image-20241119105439855.png)
+![image-20241119105439855](./main.assets/cc3-1.png)
 
 ## 调用链
 

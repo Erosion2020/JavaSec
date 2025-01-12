@@ -167,7 +167,7 @@ public class CommonsCollections1 {
 }
 ```
 
-![image-20241118184950749](./main.assets/image-20241118184950749.png)
+![image-20241118184950749](./main.assets/cc1-1.png)
 
 在chain执行完transform方法之后，我们构造的代码被执行，让我们来分析一下代码是如何被执行的。
 
@@ -452,25 +452,25 @@ public static void cc1bySerial() throws Exception {
 
 总结起来就是，我们要触发AnnotationInvocationHandler中的invoke方法，而这个方法会在动态代理过程中被调用。
 
-最后让我们运行一下，弹一个cmd窗口吧，注意这份代码只有在JDK<8u21的版本下运行才可以，推荐直接使用JDK：https://repo.huaweicloud.com/java/jdk/7u80-b15/jdk-7u80-windows-x64.exe，最后看下运行效果
+最后让我们运行一下，弹一个cmd窗口吧，注意这份代码只有在JDK<8u21的版本下运行才可以，推荐直接使用JDK：[华为JDK镜像源 7u80-windows-x64下载](https://repo.huaweicloud.com/java/jdk/7u80-b15/jdk-7u80-windows-x64.exe)，最后看下运行效果
 
-![image-20241118203232689](./main.assets/image-20241118203232689.png)
+![image-20241118203232689](./main.assets/cc1-2.png)
 
 ## 调用链总结 - ysoserial
 
-ObjectInputStream.readObject()
-    AnnotationInvocationHandler.readObject()
-       Map(Proxy).entrySet()
-          AnnotationInvocationHandler.invoke()
-             LazyMap.get()
-                ChainedTransformer.transform()
-                   ConstantTransformer.transform()
-                   InvokerTransformer.transform()
-                      Method.invoke()
-                         Class.getMethod()
-                   InvokerTransformer.transform()
-                      Method.invoke()
-                         Runtime.getRuntime()
-                   InvokerTransformer.transform()
-                      Method.invoke()
-                         Runtime.exec()
+* ObjectInputStream.readObject()
+  * AnnotationInvocationHandler.readObject()
+    * Map(Proxy).entrySet()
+      * AnnotationInvocationHandler.invoke()
+        * LazyMap.get()
+          * ChainedTransformer.transform()
+            * ConstantTransformer.transform()
+              * InvokerTransformer.transform()
+                * Method.invoke()
+                * Class.getMethod()
+              * InvokerTransformer.transform()
+                * Method.invoke()
+                * Runtime.getRuntime()
+              * InvokerTransformer.transform()
+                * Method.invoke()
+                * Runtime.exec()

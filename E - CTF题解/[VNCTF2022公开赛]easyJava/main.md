@@ -305,7 +305,7 @@ public class Secr3t {
 
 ### SerAndDe.class
 
-其实就是一个很尝贵的Java对象序列化字节数组的操作，Java原生提供了这样的功能，我也写过一个小的工具类，包含了这个功能，参考：[Java类转字节码工具](https://github.com/Erosion2020/JavaSec/blob/main/B - 反序列化/Java类转字节码工具/main.md)
+其实就是一个很尝贵的Java对象序列化字节数组的操作，Java原生提供了这样的功能，我也写过一个小的工具类，包含了这个功能，参考：[Java类转字节码工具](../../B%20-%20反序列化/Java类转字节码工具/main.md)
 
 ```java
 package util;
@@ -384,10 +384,10 @@ Servlet默认是单例的，所以在Servlet中的this.name字段也是只有一
  |		         HelloWorldServlet             |
  ---------------this.name(m4n_q1u_666)-----------
         线程A(name=erosion2020)			线程B(name=vnctf2022)				 this.name变化
-     	|                          					|				  		m4n_q1u_666 
+     	 |                          				|				  		m4n_q1u_666 
 name != null,所以this.name修改为erosion2020			 |				   		 erosion2020
          | 							线程B进场(vnctf2020)，触发name!=null   	vnctf2022
-第一个Secr3t.check=false         					  |					   	   vnctf2022
+第一个Secr3t.check=false         					 |					   	   vnctf2022
          |         					              ......  				   	  vnctf2022
 进入第二个if，此时的this.name=vnctf2020，满足条件     ......  				   	vnctf2022  
          |          							 ......  				   	 vnctf2022  

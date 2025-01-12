@@ -6,13 +6,10 @@
 
 我这里是缝合了以下博客来总结的内容，希望可以把基础知识和JNDI攻击结合起来，写的更加适合小白一些......
 
-[JNDI学习总结（一）](https://blog.csdn.net/wn084/article/details/80729230)
-
-[JNDI学习总结（二）](https://blog.csdn.net/wn084/article/details/80736253)
-
-[mi1k7ea师傅: JNDI原理 + JNDI注入 + 高版本JDK绕过](https://www.mi1k7ea.com/2019/09/15/%E6%B5%85%E6%9E%90JNDI%E6%B3%A8%E5%85%A5/)
-
-[oracle JNDI官方文档](https://docs.oracle.com/javase/tutorial/jndi/overview/index.html)
+- [JNDI学习总结（一）](https://blog.csdn.net/wn084/article/details/80729230)
+- [JNDI学习总结（二）](https://blog.csdn.net/wn084/article/details/80736253)
+- [mi1k7ea师傅: JNDI原理 + JNDI注入 + 高版本JDK绕过](https://www.mi1k7ea.com/2019/09/15/%E6%B5%85%E6%9E%90JNDI%E6%B3%A8%E5%85%A5/)
+- [oracle JNDI官方文档](https://docs.oracle.com/javase/tutorial/jndi/overview/index.html)
 
 ## 什么是JNDI？
 

@@ -177,7 +177,7 @@ public class CommonsCollections5 {
 
 来弹个cmd
 
-![image-20241119161717938](./main.assets/image-20241119161717938.png)
+![image-20241119161717938](./main.assets/cc5-1.png)
 
 ## 调用链
 

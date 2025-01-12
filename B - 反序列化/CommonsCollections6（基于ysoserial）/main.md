@@ -269,7 +269,7 @@ public class CommonsCollections6 {
 
 来弹个cmd
 
-![image-20241119210521358](./main.assets/image-20241119210521358.png)
+![image-20241119210521358](./main.assets/cc6-1.png)
 
 ## 调用链总结
 
