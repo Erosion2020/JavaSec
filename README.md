@@ -76,6 +76,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
   - Wicket：[FileUpload Gadget chain](./B%20-%20反序列化/Wicket1/main.md)
   - Hibernate1：[HashMap + TypedValue + ValueHolder + DeferredInitializer + ComponentType + PojoComponentTuplizer + BasicPropertyAccessor$BasicGetter / GetterMethodImpl + TemplatesImpl](./B%20-%20反序列化/Hibernate1/main.md)
   - Hibernate2：[HashMap + TypedValue + ValueHolder + DeferredInitializer + ComponentType + PojoComponentTuplizer + BasicPropertyAccessor$BasicGetter / GetterMethodImpl + JdbcRowSetImpl](./B%20-%20反序列化/Hibernate2/main.md)
+  - Spring1：[MethodInvokeTypeProvider + TypeProvider + ObjectFactoryDelegatingInvocationHandler + AnnotationInvocationHandler + TemplatesImpl](./B%20-%20反序列化/Spring1/main.md)
 
 ## 内存马
 
