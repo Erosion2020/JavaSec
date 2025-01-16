@@ -77,6 +77,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
   - Hibernate1：[HashMap + TypedValue + ValueHolder + DeferredInitializer + ComponentType + PojoComponentTuplizer + BasicPropertyAccessor$BasicGetter / GetterMethodImpl + TemplatesImpl](./B%20-%20反序列化/Hibernate1/main.md)
   - Hibernate2：[HashMap + TypedValue + ValueHolder + DeferredInitializer + ComponentType + PojoComponentTuplizer + BasicPropertyAccessor$BasicGetter / GetterMethodImpl + JdbcRowSetImpl](./B%20-%20反序列化/Hibernate2/main.md)
   - Spring1：[MethodInvokeTypeProvider + TypeProvider + ObjectFactoryDelegatingInvocationHandler + AnnotationInvocationHandler + TemplatesImpl](./B%20-%20反序列化/Spring1/main.md)
+  - Spring2：[MethodInvokeTypeProvider + TypeProvider + AnnotationInvocationHandler + JdkDynamicAopProxy + TemplatesImpl](./B%20-%20反序列化/Spring2/main.md)
 
 ## 内存马
 

