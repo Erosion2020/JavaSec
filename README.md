@@ -1,10 +1,12 @@
 # JavaSec
 
-嗨，师傅们，我是从2024年底开始踏入Java安全领域的新手。从零开始学，走过不少弯路，也遇到不少“师傅们”默认你已懂的代码细节，比如FastJson TemplatesImpl漏洞利用那一大段base64脚本图片，真是调试不起来啊！
+嗨，师傅们，我是从2024年底开始踏入Java安全领域的新手。从零开始学，走过不少弯路，也遇到不少“师傅们”默认你已懂的代码细节，比如FastJson TemplatesImpl漏洞利用中那一大段base64脚本(还是截图)，真是调试不起来啊！
 
 因此，这个仓库记录了我从最初迷茫到逐步掌握Java安全技术的全过程。不论是漏洞原理解析、代码调试，还是IDEA调试Tomcat的实战技巧，我都力求把每一步讲得清清楚楚，帮助同样处于起步阶段的小伙伴们避开那些坑。
 
 欢迎师傅们指点，喜欢的朋友也别忘了点个Star，共同见证从0到1的成长旅程！
+
+如果看完本笔记，你有不理解的地方，欢迎在issue中提问题哦~ 我会持续优化这份学习笔记。
 
 ## Java基础
 
@@ -19,6 +21,7 @@
 - SPI机制: [SPI基本概念 + SPI攻击](./A%20-%20JAVA基础/SPI/main.md)
 - Debug Tomcat源码: [Tomcat安装 + IDEA创建JAVA WEB项目 + IDEA开启调试Tomcat](./C%20-%20内存马/B%20-%20JAVA%20WEB调试环境搭建/main.md)
 - 为什么Java的反弹Shell这么奇怪: [Runtime的解析规则 + Base64编码 + 反弹shell示例](./A%20-%20JAVA基础/Runtime反弹shell/main.md)
+- IDEA调试技巧: [关闭toString + maven依赖源码下载](./A%20-%20JAVA基础/IDEA调试技巧/debug.md)
 
 ### JDK下载资源
 
