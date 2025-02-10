@@ -36,40 +36,31 @@ Java 的 ASM、Javassist 和反射是安全研究的重要方向之一，主要�
 
 ## 反序列化
 
-JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial中的代码来记录的。嗯~网上有很多魔改代码，但是如果想要标准系统化的学习的话还是要基于ysoserial这个反序列化漏洞的起源项目来学习。
+主要以调试`ysoserial`中的攻击链为主，可能也会在此基础上进行改进、补充
 
+### 反序列化基础
+
+- 反射机制: [JAVA反射基础知识 + 修改被private final修饰的字段](./A%20-%20JAVA基础/Java反射/main.md)
+- ClassLoader: [BootstrapClassLoader + ExtClassLoader + AppClassLoader + 双亲委派](./A%20-%20JAVA基础/详解%20JAVAClassLoader/main.md)
+- 静态代理&动态代理: [静态代理 + Proxy动态代理](./A%20-%20JAVA基础/JAVA动态代理&静态代理/main.md)
 - Java类转字节码工具：[Java类转Base64编码字符串 + Base64编码字符串转.class文件](./B%20-%20反序列化/Java类转字节码工具/main.md)
 - 基础知识：[反序列化漏洞的起源 + JAVA反序列化 + URLDNS](./B%20-%20反序列化/JAVA反序列化学习-前置知识（基于ysoserial）/反序列化与反射介绍.md)
 - 详解TemplatesImpl反序列化：[XSLT + Templates + TransletClassLoader](./B%20-%20反序列化/详解TemplatesImpl/main.md)
 - AmazingCode (1)绕过构造方法的限制：[Object默认构造 + 创建目标无参构造实例](./B%20-%20反序列化/BeautifulCode1/main.md)
 
-### CC链
+### 反序列化链
 
-  `CommonsCollections(CC)`反序列化攻击链
+每篇文章都会记录依赖库版本、JDK版本、基础知识、可单个java文件运行的poc，适合小白调试反序列化.
 
-  - CC1攻击链：[AnnotationInvocationHandler + Proxy + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections1（基于ysoserial）/main.md)
-  - CC2攻击链：[PriorityQueue + TransformingComparator + Transformer + TemplatesImpl](./B%20-%20反序列化/CommonsCollections2（基于ysoserial）/main.md)
-  - CC3攻击链：[AnnotationInvocationHandler + Proxy + LazyMap + Transformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CommonsCollections3（基于ysoserial）/main.md)
-  - CC4攻击链：[PriorityQueue + TransformingComparator + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CommonsCollections4（基于ysoserial）/main.md)
-  - CC5攻击链：[BadAttributeValueExpException + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections5（基于ysoserial）/main.md)
-  - CC6攻击链：[HashSet + HashMap + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections6（基于ysoserial）/main.md)
-  - CC7攻击链：[HashTable + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections7（基于ysoserial）/main.md)
-  - CC2+CC5变种攻击链：[BadAttributeValueExpException + TiedMapEntry + LazyMap + ChainedTransformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CC2+CC5变种笔记/CC2+CC5变种笔记.md)
-
-
-  ### CB链
-
-  `CommonsBeanUtils(CB)`反序列化攻击链
-
-  - CB1攻击链：[PriorityQueue + BeanComparator + TemplatesImpl](./B%20-%20反序列化/CommonsBeanUtils1（基于ysoserial）/main.md)
-
-回头有空了再汇总一下反序列化攻击链中的所有利用方法吧，其实汇总之后，你会发现反序列化的链子其实也就是各个类的不同组合而已，用已知的可利用类直接可以互相拼接。但是想要发现新的攻击链，还是非常难滴，师傅究竟是咋挖的，教教俺好不好~
-
-  ### 其他攻击链
-
-  主要还是ysoserial中除URLDNS、CC、CB之外的其他攻击链。
-  赶紧把ysoserial中的攻击链调完，还有好多东西没学。卷不动啦，师傅~
-
+  - CommonsCollections1：[AnnotationInvocationHandler + Proxy + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections1（基于ysoserial）/main.md)
+  - CommonsCollections2：[PriorityQueue + TransformingComparator + Transformer + TemplatesImpl](./B%20-%20反序列化/CommonsCollections2（基于ysoserial）/main.md)
+  - CommonsCollections3：[AnnotationInvocationHandler + Proxy + LazyMap + Transformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CommonsCollections3（基于ysoserial）/main.md)
+  - CommonsCollections4：[PriorityQueue + TransformingComparator + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CommonsCollections4（基于ysoserial）/main.md)
+  - CommonsCollections5：[BadAttributeValueExpException + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections5（基于ysoserial）/main.md)
+  - CommonsCollections6：[HashSet + HashMap + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections6（基于ysoserial）/main.md)
+  - CommonsCollections7：[HashTable + TiedMapEntry + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections7（基于ysoserial）/main.md)
+  - CC2+CC5：[BadAttributeValueExpException + TiedMapEntry + LazyMap + ChainedTransformer + TrAXFilter + TemplatesImpl](./B%20-%20反序列化/CC2+CC5变种笔记/CC2+CC5变种笔记.md)
+  - CommonsBeanUtils1：[PriorityQueue + BeanComparator + TemplatesImpl](./B%20-%20反序列化/CommonsBeanUtils1（基于ysoserial）/main.md)
   - JDK7u21：[HashSet + HashMap + AnnotationInvocationHandler + TemplatesImpl](./B%20-%20反序列化/JDK7u21/main.md)
   - Groovy：[AnnotationInvocationHandler + ConvertedClosure + MethodClosure](./B%20-%20反序列化/Groovy1/main.md)
   - FileUpload：[DiskFileItem + DeferredFileOutputStream](./B%20-%20反序列化/FileUpload/main.md)
@@ -78,6 +69,7 @@ JAVA反序列化安全学习笔记，下边的调试代码都是基于ysoserial�
   - Hibernate2：[HashMap + TypedValue + ValueHolder + DeferredInitializer + ComponentType + PojoComponentTuplizer + BasicPropertyAccessor$BasicGetter / GetterMethodImpl + JdbcRowSetImpl](./B%20-%20反序列化/Hibernate2/main.md)
   - Spring1：[MethodInvokeTypeProvider + TypeProvider + ObjectFactoryDelegatingInvocationHandler + AnnotationInvocationHandler + TemplatesImpl](./B%20-%20反序列化/Spring1/main.md)
   - Spring2：[MethodInvokeTypeProvider + TypeProvider + AnnotationInvocationHandler + JdkDynamicAopProxy + TemplatesImpl](./B%20-%20反序列化/Spring2/main.md)
+  - MozillaRhino1: [BadAttributeValueExpException + NativeError + ScriptableObject + IdScriptableObject + NativeJavaMethod + MemberBox + TemplatesImpl](./B%20-%20反序列化/MozillaRhino/main1.md)
 
 ## 内存马
 
