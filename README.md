@@ -1,26 +1,14 @@
 # JavaSec
-师傅~，您看我24年底才开始学Java安全，俺还有机会吗？｡ﾟ(ﾟ´ω`ﾟ)ﾟ｡
 
-Java安全学习笔记，记录一下自己从0开始学习Java安全的过程。网上有不少师傅的漏洞分析其实并不是非常友好，可能师傅们默认这个知识点俺已经会啦，其实俺一点都不会（哭~，5555555555。
+嗨，师傅们，我是从2024年底开始踏入Java安全领域的新手。从零开始学，走过不少弯路，也遇到不少“师傅们”默认你已懂的代码细节，比如FastJson TemplatesImpl漏洞利用那一大段base64脚本图片，真是调试不起来啊！
 
-所以本仓库的目的是希望真的能分享一些更加零基础的Java安全学习过程，同时会去调试一些师傅们的代码，比如在FastJson的TemplatesImpl漏洞利用代码中，网上很多师傅就直接给了一个base64的_bytecodes的代码的脚本图片，啊，这，师傅，我没法调试啊~，5555555。
+因此，这个仓库记录了我从最初迷茫到逐步掌握Java安全技术的全过程。不论是漏洞原理解析、代码调试，还是IDEA调试Tomcat的实战技巧，我都力求把每一步讲得清清楚楚，帮助同样处于起步阶段的小伙伴们避开那些坑。
 
-所以你懂的，本仓库希望给的脚本或者是其他内容更加全面一些，也会加一些如IDEA怎么调试Tomcat这种类似的分享。
+欢迎师傅们指点，喜欢的朋友也别忘了点个Star，共同见证从0到1的成长旅程！
 
-该github仓库最终会和我的博客中的内容对应起来：[博客园- Java安全学习指南](https://www.cnblogs.com/erosion2020/p/18558523)
+## Java基础
 
-## 环境准备
-
-记录一下JDK等环境的下载地址，下次就不用Google搜索了，嘿嘿嘿！
-
-- [Oracle官方JDK8下载](https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html)
-- [华为JDK镜像站](https://repo.huaweicloud.com/java/jdk/)
-- [编程宝库JDK下载地址](http://www.codebaoku.com/jdk/jdk-oracle-jdk1-8.html)
-- [InJDK下载地址/镜像源导航](https://injdk.cn/)
-
-## Java基础 & 反射
-
-Java 的 ASM、Javassist 和反射是安全研究的重要方向之一，主要集中在字节码操作和运行时行为分析上。ASM 和 Javassist 允许研究者直接操作字节码，进行漏洞利用链（Gadget Chain）的生成、恶意代码注入，以及对反序列化、动态代理等机制的深入分析；反射则是许多漏洞的核心，例如通过访问控制绕过、内存马注入或动态方法调用实现攻击。它们共同为研究 Java 平台的动态特性和潜在安全风险提供了技术支撑，是理解漏洞机制、开发利用工具和分析攻击链的基础。
+在基础篇内容中主要提及字节码技术(ASM、Javassist)、反射、JNDI、RMI、SPI等内容，这些知识会在反序列化链中被应用。同时也会记录一些小知识，比如IDEA中的Debug技巧、Java中的反弹shell等。
 
 - 反射机制: [JAVA反射基础知识 + 修改被private final修饰的字段](./A%20-%20JAVA基础/Java反射/main.md)
 - ClassLoader: [BootstrapClassLoader + ExtClassLoader + AppClassLoader + 双亲委派](./A%20-%20JAVA基础/详解%20JAVAClassLoader/main.md)
@@ -31,8 +19,14 @@ Java 的 ASM、Javassist 和反射是安全研究的重要方向之一，主要�
 - SPI机制: [SPI基本概念 + SPI攻击](./A%20-%20JAVA基础/SPI/main.md)
 - Debug Tomcat源码: [Tomcat安装 + IDEA创建JAVA WEB项目 + IDEA开启调试Tomcat](./C%20-%20内存马/B%20-%20JAVA%20WEB调试环境搭建/main.md)
 - 为什么Java的反弹Shell这么奇怪: [Runtime的解析规则 + Base64编码 + 反弹shell示例](./A%20-%20JAVA基础/Runtime反弹shell/main.md)
-- 从一个Demo示例学习序列化协议: [反序列化工具介绍 + 反序列化Demo调试 + 010Editor修改字节码](./A%20-%20JAVA基础/反序列化协议分析/main.md)
-- 序列化协议-官方文档(翻译 + 补充): [官方文档翻译 + 内容补充](./A%20-%20JAVA基础/反序列化协议.官方文档(翻译%20+%20补充)/main.md)
+
+### JDK下载资源
+
+- [Oracle官方JDK8下载](https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html)
+- [华为JDK镜像站](https://repo.huaweicloud.com/java/jdk/)
+- [编程宝库JDK下载地址](http://www.codebaoku.com/jdk/jdk-oracle-jdk1-8.html)
+- [InJDK下载地址/镜像源导航](https://injdk.cn/)
+
 
 ## 反序列化
 
@@ -47,10 +41,12 @@ Java 的 ASM、Javassist 和反射是安全研究的重要方向之一，主要�
 - 基础知识：[反序列化漏洞的起源 + JAVA反序列化 + URLDNS](./B%20-%20反序列化/JAVA反序列化学习-前置知识（基于ysoserial）/反序列化与反射介绍.md)
 - 详解TemplatesImpl反序列化：[XSLT + Templates + TransletClassLoader](./B%20-%20反序列化/详解TemplatesImpl/main.md)
 - AmazingCode (1)绕过构造方法的限制：[Object默认构造 + 创建目标无参构造实例](./B%20-%20反序列化/BeautifulCode1/main.md)
+- 从一个Demo示例学习序列化协议: [反序列化工具介绍 + 反序列化Demo调试 + 010Editor修改字节码](./A%20-%20JAVA基础/反序列化协议分析/main.md)
+- 序列化协议-官方文档(翻译 + 补充): [官方文档翻译 + 内容补充](./A%20-%20JAVA基础/反序列化协议.官方文档(翻译%20+%20补充)/main.md)
 
 ### 反序列化链
 
-每篇文章都会记录依赖库版本、JDK版本、基础知识、可单个java文件运行的poc，适合小白调试反序列化.
+每篇文章都会记录依赖库版本、JDK版本、基础知识、可单个java文件运行的poc，适合小白调试反序列化。
 
   - CommonsCollections1：[AnnotationInvocationHandler + Proxy + LazyMap + Transformer](./B%20-%20反序列化/CommonsCollections1（基于ysoserial）/main.md)
   - CommonsCollections2：[PriorityQueue + TransformingComparator + Transformer + TemplatesImpl](./B%20-%20反序列化/CommonsCollections2（基于ysoserial）/main.md)
