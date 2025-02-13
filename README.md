@@ -80,6 +80,10 @@
 - Listener内存马: [Listener示例 + ApplicationListener Debug + Listener内存马代码](./C%20-%20内存马/D%20-%20Listener内存马/main.md)
 - Filter内存马: [Filter代码Debug + Filter内存马代码 + 运行](./C%20-%20内存马/E%20-%20Filter内存马/main.md)
 
+## 代码审计
+
+* [CodeQL环境配置](./G%20-%20代码审计/codeql/1-环境配置.md)
+
 ## JNDI注入
 
 - JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
