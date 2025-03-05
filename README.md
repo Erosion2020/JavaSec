@@ -31,9 +31,9 @@
 - [InJDK下载地址/镜像源导航](https://injdk.cn/)
 
 
-## 反序列化
+## 反序列化 & JNDI
 
-主要以调试`ysoserial`中的攻击链为主，可能也会在此基础上进行改进、补充
+在 Java 安全领域，Java 反序列化漏洞 和 JNDI 注入 是两种常见且严重的安全威胁，攻击者可以利用它们进行 远程代码执行（RCE），从而控制目标服务器。
 
 ### 反序列化基础
 
@@ -47,7 +47,9 @@
 - 从一个Demo示例学习序列化协议: [反序列化工具介绍 + 反序列化Demo调试 + 010Editor修改字节码](./A%20-%20JAVA基础/反序列化协议分析/main.md)
 - 序列化协议-官方文档(翻译 + 补充): [官方文档翻译 + 内容补充](./A%20-%20JAVA基础/反序列化协议.官方文档(翻译%20+%20补充)/main.md)
 
-### 反序列化链
+### ysoserial反序列化链
+
+这里主要以调试`ysoserial`中的攻击链为主，可能也会在此基础上进行改进、补充。
 
 每篇文章都会记录依赖库版本、JDK版本、基础知识、可单个java文件运行的poc，适合小白调试反序列化。
 
@@ -70,6 +72,14 @@
   - Spring2：[MethodInvokeTypeProvider + TypeProvider + AnnotationInvocationHandler + JdkDynamicAopProxy + TemplatesImpl](./B%20-%20反序列化/Spring2/main.md)
   - MozillaRhino1: [BadAttributeValueExpException + NativeError + ScriptableObject + IdScriptableObject + NativeJavaMethod + MemberBox + TemplatesImpl](./B%20-%20反序列化/MozillaRhino/main1.md)
 
+### 其他反序列化攻击 & JNDI
+
+- SnakeYAML 反序列化：[SnakeYAML代码分析 + SPI + JdbcRowSetImpl](./B%20-%20反序列化/SnakeYaml/main.md)
+- JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
+- JdbcRowSetImpl分析：[connect + getDatabaseMetaData + setAutoCommit + prepare + execute](./D%20-%20JNDI注入/JdbcRowSetImpl/main.md)
+- log4j2 注入/远程代码执行 漏洞 CVE-2021-44228：[log4j2漏洞点分析 + 漏洞代码分析](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-1(CVE-2021-44228)/main.md)
+- log4j2 注入/远程代码执行-2 漏洞：[WAF绕过 + 协议总结 + 信息泄露用法](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-2/main.md)
+
 ## 内存马
 
 内存马是一种无文件Webshell，简单来说就是服务器上不会存在需要链接的webshell脚本文件。 传统webshell会在目标服务器中留存具体的payload文件，但现在安全软件对于静态webshell的查杀能力已经非常的强，可能payload文件在写入的一瞬间就会被查杀，而内存马的原理就是在web组件或者应用程序中，注册一层访问路由，访问者通过这层路由，来执行我们控制器中的代码，一句话就能概括，那就是对访问路径映射及相关处理代码的动态注册。
@@ -83,13 +93,6 @@
 ## 代码审计
 
 * [CodeQL环境配置](./G%20-%20代码审计/codeql/1-环境配置.md)
-
-## JNDI注入
-
-- JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
-- JdbcRowSetImpl分析：[connect + getDatabaseMetaData + setAutoCommit + prepare + execute](./D%20-%20JNDI注入/JdbcRowSetImpl/main.md)
-- log4j2 注入/远程代码执行 漏洞 CVE-2021-44228：[log4j2漏洞点分析 + 漏洞代码分析](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-1(CVE-2021-44228)/main.md)
-- log4j2 注入/远程代码执行-2 漏洞：[WAF绕过 + 协议总结 + 信息泄露用法](./D%20-%20JNDI注入/log4j2%20变量注入漏洞-2/main.md)
 
 ## CVE复现
 
