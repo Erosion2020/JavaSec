@@ -74,6 +74,7 @@
 
 ### 其他反序列化攻击 & JNDI
 
+- fastjson漏洞利用原理: [FastJson序列化/反序列化核心代码分析 + JdbcRowSetImpl + TemplatesImpl](./B%20-%20反序列化/FastJSON/main.md)
 - SnakeYAML 反序列化：[SnakeYAML代码分析 + SPI + JdbcRowSetImpl](./B%20-%20反序列化/SnakeYaml/main.md)
 - JNDIExploit攻击工具分析：[JNDI-Injection-Exploit](./D%20-%20JNDI注入/JNDI-Exploit分析/main.md)
 - JdbcRowSetImpl分析：[connect + getDatabaseMetaData + setAutoCommit + prepare + execute](./D%20-%20JNDI注入/JdbcRowSetImpl/main.md)
