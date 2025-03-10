@@ -25,7 +25,7 @@
 
 ### JDK下载资源
 
-- [Oracle官方JDK8下载](https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html)
+- [\*推荐\* - Oracle官方全版本JDK归档下载](https://www.oracle.com/cn/java/technologies/downloads/archive/)
 - [华为JDK镜像站](https://repo.huaweicloud.com/java/jdk/)
 - [编程宝库JDK下载地址](http://www.codebaoku.com/jdk/jdk-oracle-jdk1-8.html)
 - [InJDK下载地址/镜像源导航](https://injdk.cn/)
