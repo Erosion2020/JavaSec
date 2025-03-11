@@ -766,9 +766,14 @@ hhhhhh，这有个非常熟悉的字段对吧。就是`Feature.SupportNonPublicF
 
 ### 反序列化(parseObject)
 
-网上还有人说这个和`parse`的区别，额，其实关于这个`fastjson`就写了一行代码，就是把`Object`强转成`JSONObject`，`JSONObject`是一个处理JSON更加灵活的类，提供了很多好用的方法。
+网上还有人说这个和`parse`的区别，额，其实关于这个`fastjson`有两种处理情况，分别是：
 
-![image-20250310195013838](./assets/image-20250310195013838.png)
+1. 如果指定了`Feature`属性，就是把`Object`强转成`JSONObject`，`JSONObject`是一个处理JSON更加灵活的类，提供了很多好用的方法。
+2. 另一种情况是：如果`parse`的结果不是`JSONObject`对象，则调用`JSON.toJSON`来将其转换为`JSONObject`。
+
+但是目前这篇文章中的两条攻击链`TemplatesImpl`和`JdbcRowSetImpl`用不到这个，所以放到下篇文章中介绍吧。
+
+![image-20250311195718266](./assets/image-20250311195718266.png)
 
 ### 总结
 
