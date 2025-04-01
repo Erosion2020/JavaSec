@@ -22,6 +22,7 @@
 - Debug Tomcat源码: [Tomcat安装 + IDEA创建JAVA WEB项目 + IDEA开启调试Tomcat](./C%20-%20内存马/B%20-%20JAVA%20WEB调试环境搭建/main.md)
 - 为什么Java的反弹Shell这么奇怪: [Runtime的解析规则 + Base64编码 + 反弹shell示例](./A%20-%20JAVA基础/Runtime反弹shell/main.md)
 - IDEA调试技巧: [关闭toString + maven依赖源码下载](./A%20-%20JAVA基础/IDEA调试技巧/debug.md)
+- vulhub环境调试: [vulhub开启jwdp + IDEA远程连接调试](./A%20-%20JAVA基础/远程调试vulhub代码/main.md)
 
 ### JDK下载资源
 
