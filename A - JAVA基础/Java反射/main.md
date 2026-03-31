@@ -74,50 +74,60 @@ class Person {
 ```
 
 ## 获取Class对象
+                                                                                                                                                                                
+  有四种方法可以获取到Class对象
 
-有两种方法可以获取到Class对象
-
-### 方式1
-
-```java
-public static void main(String[] args) throws Exception {
-	// 获取 Person 类的 Class 对象
-    Class<?> clazz = Person.class;
-}
-```
-
-在 Java 中，`Person.class` 是直接通过类字面量（Class Literal）获得 `Person` 类的 `Class` 对象。这个 `Class` 对象是 Java 类型系统中表示 `Person` 类的对象。
-
-- `Person.class` 表示 `Person` 类本身（而非 `Person` 的实例）。
-- `Person.class` 获取的是一个 `Class<Person>` 类型的对象，它表示 `Person` 类的元数据。
-- 在这里，`Person.class` 的类型是 **`Class<Person>`**，这意味着它是一个 `Class` 类型对象，且其泛型参数为 `Person` 类本身。
-
-### 方式2
+  方式1
 
 ```java
-public static void main(String[] args) throws Exception {
-	// 获取 Person 类的 Class 对象
-    Class<? extends Person> clazz = Person.class.getClass();
-}
+  public static void main(String[] args) throws Exception {
+      // 获取 Person 类的 Class 对象
+      Class<Person> clazz = Person.class;
+  }
 ```
 
-`Person.class.getClass()` 调用的过程是先获取 `Person.class` 这个 `Class` 对象，然后对这个 `Class` 对象调用 `getClass()` 方法。`getClass()` 方法是 `Object` 类的方法，返回的是该对象的运行时类型的 `Class` 对象。
+  在 Java 中，Person.class 是直接通过类字面量（Class Literal）获得 Person 类的 Class 对象。这个 Class 对象是 Java 类型系统中表示 Person 类的对象。
 
-`Person.class.getClass()` 的目的是获取 `Person.class` 这个 `Class` 对象的类型。
+  - Person.class 表示 Person 类本身（而非 Person 的实例）。
+  - Person.class 获取的是一个 Class<Person> 类型的对象，它表示 Person 类的元数据。
+  - 在这里，Person.class 的类型是 Class<Person>，这意味着它是一个 Class 类型对象，且其泛型参数为 Person 类本身。
 
-`Person.class` 的类型是 `Class<Person>`，而 `Class<Person>` 继承自 `Class<?>`，因此 `getClass()` 返回的类型是 `Class<? extends Class<?>>`，即表示 `Class` 类型的 `Class` 对象。
+  方式2
+```java
+  public static void main(String[] args) throws Exception {
+      // 通过实例获取 Person 类的 Class 对象
+      Person person = new Person();
+      Class<? extends Person> clazz = person.getClass();
+  }
+```
+  person.getClass() 调用的是 Object 类的 getClass() 方法，返回的是该实例的运行时类型的 Class 对象。
 
-也就是说，`Person.class.getClass()` 返回的是 `Class<? extends Class<?>>`，它表示的是 `Class` 的类（即 `Class.class` 的类）。
+  - 返回类型是 Class<? extends Person> 而非 Class<Person>，是因为 person 在运行时可能是 Person 的某个子类实例，使用 ? extends Person 更准确地表达了这一点。
+  - 注意与方式1的区别：方式1在编译期就确定了类型，方式2反映的是运行时的实际类型，当 person 是子类实例时两者会不同。
 
-### 方式3
+  方式3
+当你知道一个 class 的完整类名，可以通过静态方法 Class.forName() 获取：
+```java
+  public static void main(String[] args) throws Exception {
+      Class<?> cls = Class.forName("com.test.Person");
+  }
+```
+  - 类名必须是完整的全限定名（包含包名）。
+  - 该方法会触发类的初始化，如果类不存在会抛出 ClassNotFoundException。
+  - 由于类名是字符串，编译期无法确定具体类型，因此返回类型为 Class<?>。
 
-当你知道一个`class`的完整类名，可以通过静态方法`Class.forName()`获取
+  方式4
+
+  通过类加载器获取：
 
 ```java
-public static void main(String[] args) throws Exception {
-    Class cls = Class.forName("com.test.Person");
-}
+  public static void main(String[] args) throws Exception {
+      Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass("com.test.Person");
+  }
 ```
+
+  - 与 Class.forName() 类似，同样需要完整的全限定类名。
+  - 两者的关键区别：Class.forName() 默认会触发类的初始化（执行静态代码块），而 ClassLoader.loadClass() 只加载类但不会触发初始化。
 
 ## 获取构造方法
 
